@@ -177,6 +177,40 @@ When the user requests updates or when documenting resolved issues:
 - Include both production and development details
 - Add URLs for easy navigation
 
+**⚠️ SECURITY WARNING - What NOT to Store in key_facts.md:**
+
+**NEVER store passwords, API keys, or sensitive credentials in key_facts.md.** This file is typically committed to version control and should only contain **non-sensitive** reference information such as:
+
+✅ **Safe to store:**
+- Database hostnames, ports, and cluster names
+- Client names and project identifiers
+- JIRA project keys and Confluence space names
+- AWS account names and profile names (e.g., "dev", "staging", "prod")
+- API endpoint URLs (public URLs only)
+- Service account email addresses (not the keys!)
+- GCP project IDs and region names
+- Docker registry names
+- Environment names and deployment targets
+
+❌ **NEVER store in git/key_facts.md:**
+- Passwords or passphrases
+- API keys or authentication tokens
+- Service account JSON keys or credentials
+- Database passwords
+- OAuth client secrets
+- Private keys or certificates
+- Session tokens
+- Any secret values from environment variables
+
+**Where to store sensitive credentials:**
+- Use `.env` files (excluded via `.gitignore`)
+- Use password managers (1Password, LastPass, etc.)
+- Use secrets managers (AWS Secrets Manager, GCP Secret Manager, HashiCorp Vault)
+- Use environment variables in CI/CD systems
+- Use secure credential stores in your deployment platform
+
+**Important reminder:** Always verify that sensitive files like `.env` are listed in `.gitignore` before committing. Use `git status` to check what will be committed. Never commit clear-text passwords or authentication keys to any git repository, even private ones.
+
 **Adding work log entry:**
 ```markdown
 ### YYYY-MM-DD - TICKET-ID: Brief Description

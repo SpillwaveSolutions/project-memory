@@ -177,6 +177,9 @@ your-project/
 ```
 
 ### key_facts.md - Project Configuration
+
+**⚠️ SECURITY WARNING:** Never store passwords, API keys, or credentials in `key_facts.md`. Only store non-sensitive reference information like hostnames, ports, client names, project IDs, and account names. Store secrets in `.env` (excluded via `.gitignore`), password managers, or secrets management systems.
+
 ```markdown
 ### Database Configuration
 
@@ -189,6 +192,7 @@ your-project/
 **Connection:**
 - Use AlloyDB Auth Proxy for local development
 - Proxy command: `./alloydb-auth-proxy "projects/..."`
+- Credentials: Stored in `.env` file (not in git)
 ```
 
 ### issues.md - Work Log
@@ -220,6 +224,49 @@ ls .claude/skills/project-memory/SKILL.md
 # For workspace installation
 ls ../.claude/skills/project-memory/SKILL.md  # From inside a project
 ```
+
+## Security Best Practices
+
+### ⚠️ Critical: Never Store Secrets in Version Control
+
+The `key_facts.md` file is designed to store **non-sensitive** project reference information only. This file is typically committed to version control and should NEVER contain:
+
+**❌ NEVER store in key_facts.md or any git-tracked file:**
+- Passwords or passphrases
+- API keys or authentication tokens
+- Service account JSON keys or credentials
+- Database passwords
+- OAuth client secrets
+- Private keys or certificates
+- Session tokens
+- Any secret values from environment variables
+
+**✅ SAFE to store in key_facts.md:**
+- Database hostnames, ports, and cluster names
+- Client names and project identifiers
+- JIRA project keys and Confluence space names
+- AWS account names and profile names (e.g., "dev", "staging", "prod")
+- API endpoint URLs (public URLs only)
+- Service account email addresses (not the keys!)
+- GCP project IDs and region names
+- Docker registry names
+- Environment names and deployment targets
+
+**✅ WHERE to store sensitive credentials:**
+- **`.env` files** - Excluded via `.gitignore`, used for local development
+- **Password managers** - 1Password, LastPass, Bitwarden, etc.
+- **Secrets managers** - AWS Secrets Manager, GCP Secret Manager, HashiCorp Vault, Azure Key Vault
+- **CI/CD environment variables** - GitHub Secrets, GitLab CI/CD Variables, etc.
+- **Platform credential stores** - Kubernetes Secrets, Cloud Run Secret Manager integration
+
+**✅ VERIFICATION steps before committing:**
+1. Run `git status` to see what will be committed
+2. Verify `.env`, `credentials.json`, and other sensitive files are in `.gitignore`
+3. Never use `git add .` blindly - review each file being staged
+4. Use `git diff --cached` to review staged changes before committing
+5. Consider using tools like `git-secrets` or `gitleaks` to prevent credential leaks
+
+**Important:** Even in private repositories, never commit clear-text passwords or authentication keys. Private repos can become public, be forked, or accessed by unauthorized users.
 
 ## Features
 
@@ -265,6 +312,121 @@ The memory system works across different AI coding tools:
 - Maintain architectural consistency across sessions
 - Reference documented facts instead of assumptions
 - Preserve institutional knowledge across team members and tools
+
+## Real-World Impact: Pattern Recognition in Action
+
+### Example 1: Bug Resolution - Infrastructure State Drift
+
+**The Scenario:**
+1. **Oct 20** - Claude Code encounters Pulumi state drift error during deployment
+2. **Investigation** - 45 minutes debugging, trying various solutions
+3. **Solution Found** - `pulumi refresh --yes` resolves the state inconsistency
+4. **Documentation** - Logged as BUG-017 and BUG-018 in bugs.md, decision documented in ADR-016
+5. **Oct 22** - Same state drift error occurs during a new deployment
+
+**Without Project Memory:**
+- Claude Code debugs from scratch (again)
+- 30-60 minutes of investigation
+- Risk of trying wrong solutions first
+- Possible production delay
+- User frustration: "Didn't we solve this already?"
+
+**With Project Memory:**
+```
+Claude Code: Searching bugs.md for "state drift"...
+Found: BUG-018 - Pulumi State Drift Error
+Known solution: pulumi refresh --yes
+Applying fix... Done in 2 minutes.
+Reference: See ADR-016 for why this works.
+```
+
+**Result:**
+- ✅ Instant recognition: "This is BUG-018"
+- ✅ Known solution applied immediately
+- ✅ 5 minutes instead of 45 minutes
+- ✅ References explain why this works (ADR-016)
+
+**Knowledge Compound Interest:** Every bug solved and documented makes future work exponentially faster.
+
+### Example 2: Architectural Consistency - Avoiding Duplicate Dependencies
+
+**The Scenario:**
+1. **Week 1** - Team evaluates charting libraries for scatter plots
+2. **Decision** - Selected D3.js for all visualizations (lightweight, flexible, already in dependencies)
+3. **Documentation** - Logged as ADR-012 in decisions.md with rationale
+4. **Week 4** - New feature requires a bar chart visualization
+
+**Without Project Memory:**
+```
+User: "Add a bar chart to the dashboard"
+Claude Code: "I'll add Chart.js for the bar chart visualization."
+[Adds Chart.js to package.json - now we have D3.js AND Chart.js]
+Result: Bundle size +85KB, inconsistent chart styling, duplicate dependencies
+```
+
+**With Project Memory:**
+```
+User: "Add a bar chart to the dashboard"
+Claude Code: Checking decisions.md for visualization decisions...
+Found: ADR-012 - Use D3.js for all charts
+Claude Code: "I'll implement the bar chart using D3.js to maintain consistency with ADR-012."
+[Uses existing D3.js dependency]
+Result: No new dependencies, consistent styling, smaller bundle
+```
+
+**Result:**
+- ✅ Maintains architectural consistency
+- ✅ Avoids dependency bloat
+- ✅ Ensures consistent user experience
+- ✅ Faster development (reuse existing patterns)
+
+**Key Insight:** Remembering past decisions prevents architectural drift and keeps the codebase cohesive.
+
+### Example 3: The "Didn't We Fix This?" Problem
+
+**The Reality of Long-Running Projects:**
+
+Many developers (and AI code assistants) encounter the same bugs months apart and completely forget the solution:
+
+**Month 1:**
+```
+Error: CORS policy blocked request from localhost:3000
+[2 hours of debugging]
+Solution: Add proxy configuration to package.json
+```
+
+**Month 6:**
+```
+Error: CORS policy blocked request from localhost:3000
+Developer: "This looks familiar... how did we fix this?"
+[Searches old commits, checks Stack Overflow again]
+[1 hour to re-discover the proxy config solution]
+```
+
+**With Project Memory:**
+```
+Error: CORS policy blocked request from localhost:3000
+Claude Code: Searching bugs.md for "CORS"...
+Found: BUG-003 - CORS Blocked in Local Development
+Solution: proxy config in package.json
+Applied in 5 minutes.
+```
+
+**The Code Agent Memory Problem:**
+
+AI code assistants don't remember previous sessions. Without documentation:
+- Each new chat session starts from zero knowledge
+- Every bug feels like the first time
+- Solutions are "rediscovered" repeatedly
+- No learning accumulates over time
+
+**With project memory, the code agent becomes progressively smarter:**
+- First encounter: 2 hours to solve → documented in bugs.md
+- Second encounter: 5 minutes (reads bugs.md)
+- Third encounter: 2 minutes (pattern now familiar)
+- Fourth encounter: Preventative advice (suggests avoiding the issue)
+
+This is **knowledge compound interest** - your project gets easier to maintain over time, not harder.
 
 ## Skill File Structure
 

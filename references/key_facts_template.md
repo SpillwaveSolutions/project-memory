@@ -1,16 +1,48 @@
 # Key Facts Template
 
-This file demonstrates the format for storing project constants, configuration, credentials, and frequently-needed information. Organize by category using bullet lists.
+This file demonstrates the format for storing project constants, configuration, and frequently-needed **non-sensitive** information. Organize by category using bullet lists.
+
+## ⚠️ SECURITY WARNING: What NOT to Store Here
+
+**NEVER store passwords, API keys, or sensitive credentials in this file.** This file is typically committed to version control and should only contain non-sensitive reference information.
+
+**❌ NEVER store:**
+- Passwords or passphrases
+- API keys or authentication tokens
+- Service account JSON keys or credentials
+- Database passwords
+- OAuth client secrets
+- Private keys or certificates
+- Session tokens
+- Any secret values from environment variables
+
+**✅ SAFE to store:**
+- Database hostnames, ports, and cluster names
+- Client names and project identifiers
+- JIRA project keys and Confluence space names
+- AWS/GCP account names and profile names
+- API endpoint URLs (public URLs only)
+- Service account email addresses (not the keys!)
+- GCP project IDs and region names
+- Docker registry names
+- Environment names and deployment targets
+
+**Where to store secrets:**
+- `.env` files (excluded via `.gitignore`)
+- Password managers (1Password, LastPass, Bitwarden)
+- Secrets managers (AWS Secrets Manager, GCP Secret Manager, HashiCorp Vault)
+- CI/CD environment variables (GitHub Secrets, GitLab Variables)
+- Platform credential stores (Kubernetes Secrets, Cloud Run)
 
 ## Format
 
 Organize information into logical categories:
 - GCP/Cloud configuration
-- Database connection details
-- API endpoints and credentials
-- Local development setup
+- Database connection details (hostnames, ports, cluster names)
+- API endpoints (URLs only, not credentials)
+- Local development setup (ports, service names)
 - Important URLs
-- Service accounts and permissions
+- Service accounts and permissions (emails and roles, not keys)
 
 Use bullet lists for simplicity and easy scanning.
 
@@ -44,9 +76,11 @@ Use bullet lists for simplicity and easy scanning.
 - Proxy command: `./alloydb-auth-proxy "projects/my-company-prod/locations/us-central1/clusters/prod-cluster/instances/prod-primary"`
 - Local port: `5432`
 
-**Credentials:**
-- Service Account: `alloydb-client@my-company-prod.iam.gserviceaccount.com`
-- Connection String: `postgresql://user:pass@localhost:5432/contacts`
+**Authentication:**
+- Service Account (email only): `alloydb-client@my-company-prod.iam.gserviceaccount.com`
+- Service Account Key: Stored in `.env` as `GOOGLE_APPLICATION_CREDENTIALS` (not in git!)
+- Connection String Template: `postgresql://user:${DB_PASSWORD}@localhost:5432/contacts`
+- Password Location: Stored in `.env` file (excluded via `.gitignore`)
 
 ### API Configuration
 
@@ -56,8 +90,9 @@ Use bullet lists for simplicity and easy scanning.
 - Local Development: `http://localhost:8000`
 
 **Authentication:**
-- OAuth Client ID: `123456789-abcdefg.apps.googleusercontent.com`
-- OAuth Client Secret: Stored in Secret Manager as `oauth-client-secret`
+- OAuth Client ID (public): `123456789-abcdefg.apps.googleusercontent.com`
+- OAuth Client Secret: Stored in GCP Secret Manager as `oauth-client-secret` (not in git!)
+- Local Development Secret: Stored in `.env` as `OAUTH_CLIENT_SECRET` (not in git!)
 - Scopes: `openid email profile`
 
 ### Local Development Ports
@@ -102,8 +137,9 @@ Use bullet lists for simplicity and easy scanning.
 **Pulumi:**
 - Stack: `prod`
 - Backend: `gs://my-company-pulumi-state`
-- Config Passphrase: Stored in team password manager
+- Config Passphrase: Stored in team password manager (1Password vault: "Infrastructure")
 - State: Stored in GCS bucket with versioning enabled
+- Note: Never commit `Pulumi.prod.yaml` with unencrypted secrets
 
 **Configuration:**
 - Cloud Run Image: `us-central1-docker.pkg.dev/my-company-prod/app/backend:latest`
