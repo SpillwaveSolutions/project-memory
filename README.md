@@ -1,8 +1,9 @@
 # Project Memory Skill
 
-[![Claude Code](https://img.shields.io/badge/Claude%20Code-Skill-blue)](https://claude.ai/code)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Skilz Marketplace](https://img.shields.io/badge/Skilz-Marketplace-purple)](https://skillzwave.ai/skill/SpillwaveSolutions__project-memory__project-memory__SKILL/)
+[![Agent Skill Standard](https://img.shields.io/badge/Agent%20Skill-Standard-blue)](https://agentskills.io/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Claude Code](https://img.shields.io/badge/Claude-Code-5A67D8)](https://claude.ai/code)
+[![SkillzWave Marketplace](https://img.shields.io/badge/SkillzWave-Marketplace-00C7B7)](https://skillzwave.ai/skill/SpillwaveSolutions__project-memory__project-memory__SKILL/)
 
 A Claude Code skill that establishes a structured institutional knowledge system for your projects. Track bugs with solutions, architectural decisions (ADRs), key project facts, and work history in a consistent, maintainable format.
 
@@ -37,40 +38,108 @@ When invoked in a project, this skill:
 
 ## Installation
 
-There are four installation options depending on your needs:
+There are four installation options depending on your needs.
 
 ### Option 1: Skilz Universal Installer (Recommended)
 
-The fastest way to install this skill is using the [skilz CLI](https://github.com/SpillwaveSolutions/skilz) - the universal skill installer for Claude Code:
+The recommended way to install this skill across different AI coding agents is using the **skilz** universal installer. This skill supports the [Agent Skill Standard](https://agentskills.io/), which means it works with 14+ coding agents including Claude Code, OpenAI Codex, Cursor, and Gemini.
+
+#### Install Skilz
 
 ```bash
-# Install skilz CLI (if not already installed)
 pip install skilz
+```
 
-# Install this skill globally
+#### Git URL Options
+
+You can use either `-g` or `--git` with HTTPS or SSH URLs:
+
+```bash
+# HTTPS URL
+skilz install -g https://github.com/SpillwaveSolutions/project-memory
+
+# SSH URL
+skilz install --git git@github.com:SpillwaveSolutions/project-memory.git
+```
+
+#### Claude Code
+
+Install to user home (available in all projects):
+```bash
+skilz install -g https://github.com/SpillwaveSolutions/project-memory
+```
+
+Install to current project only:
+```bash
+skilz install -g https://github.com/SpillwaveSolutions/project-memory --project
+```
+
+#### OpenCode
+
+Install for [OpenCode](https://opencode.ai):
+```bash
+skilz install -g https://github.com/SpillwaveSolutions/project-memory --agent opencode
+```
+
+Project-level install:
+```bash
+skilz install -g https://github.com/SpillwaveSolutions/project-memory --project --agent opencode
+```
+
+#### Gemini
+
+Project-level install for Gemini:
+```bash
+skilz install -g https://github.com/SpillwaveSolutions/project-memory --agent gemini
+```
+
+#### OpenAI Codex
+
+Install for OpenAI Codex:
+```bash
+skilz install -g https://github.com/SpillwaveSolutions/project-memory --agent codex
+```
+
+Project-level install:
+```bash
+skilz install -g https://github.com/SpillwaveSolutions/project-memory --project --agent codex
+```
+
+#### Install from SkillzWave Marketplace
+
+```bash
+# Claude to user home dir ~/.claude/skills
 skilz install SpillwaveSolutions_project-memory/project-memory
 
-# Verify installation
-skilz list
+# Claude skill in project folder ./claude/skills
+skilz install SpillwaveSolutions_project-memory/project-memory --project
+
+# OpenCode install to user home dir ~/.config/opencode/skills
+skilz install SpillwaveSolutions_project-memory/project-memory --agent opencode
+
+# OpenCode project level
+skilz install SpillwaveSolutions_project-memory/project-memory --agent opencode --project
+
+# OpenAI Codex install to user home dir ~/.codex/skills
+skilz install SpillwaveSolutions_project-memory/project-memory --agent codex
+
+# OpenAI Codex project level ./.codex/skills
+skilz install SpillwaveSolutions_project-memory/project-memory --agent codex --project
+
+# Gemini CLI (project level) -- only works with project level
+skilz install SpillwaveSolutions_project-memory/project-memory --agent gemini
 ```
 
-**Benefits of skilz:**
-- One-command installation from the [Skilz Marketplace](https://skillzwave.ai/skill/SpillwaveSolutions__project-memory__project-memory__SKILL/)
-- Automatic dependency management
-- Easy updates with `skilz update`
-- Browse and discover skills at [skillzwave.ai](https://skillzwave.ai)
+See [skill Listing](https://skillzwave.ai/skill/SpillwaveSolutions__project-memory__project-memory__SKILL/) for installation details for 14+ different coding agents.
 
-**Alternative skilz commands:**
-```bash
-# Install to a specific project only
-skilz install SpillwaveSolutions_project-memory/project-memory --local
+#### Other Supported Agents
 
-# Update to the latest version
-skilz update project-memory
+Skilz supports 14+ coding agents including Windsurf, Qwen Code, Aidr, and more. For the full list of supported platforms, visit:
 
-# Uninstall if needed
-skilz uninstall project-memory
-```
+- [SkillzWave Platforms](https://skillzwave.ai/platforms/)
+- [skilz-cli GitHub Repository](https://github.com/SpillwaveSolutions/skilz-cli)
+
+[SkillzWave - Largest Agentic Marketplace for AI Agent Skills](https://skillzwave.ai/) | [SpillWave - Leaders in AI Agent Development](https://spillwave.com/)
 
 ### Option 2: Global Installation (Manual)
 
