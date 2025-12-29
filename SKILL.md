@@ -1,9 +1,25 @@
 ---
 name: project-memory
-description: Set up and maintain a structured project memory system in docs/project_notes/ that tracks bugs with solutions, architectural decisions, key project facts, and work history. Use this skill when starting a new project that needs institutional knowledge tracking, when encountering recurring issues that should be documented, or when the user requests updates to project memory files. This skill configures both CLAUDE.md and AGENTS.md to maintain memory awareness across different AI coding tools.
+description: Set up and maintain a structured project memory system in docs/project_notes/ that tracks bugs with solutions, architectural decisions, key project facts, and work history. Use this skill when asked to "set up project memory", "track our decisions", "log a bug fix", "update project memory", or "initialize memory system". Configures both CLAUDE.md and AGENTS.md to maintain memory awareness across different AI coding tools.
 ---
 
 # Project Memory
+
+## Table of Contents
+
+- [Overview](#overview)
+- [When to Use This Skill](#when-to-use-this-skill)
+- [Core Capabilities](#core-capabilities)
+  - [1. Initial Setup - Create Memory Infrastructure](#1-initial-setup---create-memory-infrastructure)
+  - [2. Configure CLAUDE.md - Memory-Aware Behavior](#2-configure-claudemd---memory-aware-behavior)
+  - [3. Configure AGENTS.md - Multi-Tool Support](#3-configure-agentsmd---multi-tool-support)
+  - [4. Searching Memory Files](#4-searching-memory-files)
+  - [5. Updating Memory Files](#5-updating-memory-files)
+  - [6. Memory File Maintenance](#6-memory-file-maintenance)
+- [Templates and References](#templates-and-references)
+- [Example Workflows](#example-workflows)
+- [Integration with Other Skills](#integration-with-other-skills)
+- [Success Criteria](#success-criteria)
 
 ## Overview
 
@@ -140,7 +156,7 @@ grep -i "service account" docs/project_notes/key_facts.md
 
 ### 5. Updating Memory Files
 
-When the user requests updates or when documenting resolved issues:
+When the user requests updates or when documenting resolved issues, update the appropriate memory file:
 
 **Adding a bug entry:**
 ```markdown
@@ -163,12 +179,12 @@ When the user requests updates or when documenting resolved issues:
 - What was chosen
 
 **Alternatives Considered:**
-- Option 1 → Why rejected
-- Option 2 → Why rejected
+- Option 1 -> Why rejected
+- Option 2 -> Why rejected
 
 **Consequences:**
-- ✅ Benefits
-- ❌ Trade-offs
+- Benefits
+- Trade-offs
 ```
 
 **Adding key facts:**
@@ -176,40 +192,7 @@ When the user requests updates or when documenting resolved issues:
 - Use bullet lists for clarity
 - Include both production and development details
 - Add URLs for easy navigation
-
-**⚠️ SECURITY WARNING - What NOT to Store in key_facts.md:**
-
-**NEVER store passwords, API keys, or sensitive credentials in key_facts.md.** This file is typically committed to version control and should only contain **non-sensitive** reference information such as:
-
-✅ **Safe to store:**
-- Database hostnames, ports, and cluster names
-- Client names and project identifiers
-- JIRA project keys and Confluence space names
-- AWS account names and profile names (e.g., "dev", "staging", "prod")
-- API endpoint URLs (public URLs only)
-- Service account email addresses (not the keys!)
-- GCP project IDs and region names
-- Docker registry names
-- Environment names and deployment targets
-
-❌ **NEVER store in git/key_facts.md:**
-- Passwords or passphrases
-- API keys or authentication tokens
-- Service account JSON keys or credentials
-- Database passwords
-- OAuth client secrets
-- Private keys or certificates
-- Session tokens
-- Any secret values from environment variables
-
-**Where to store sensitive credentials:**
-- Use `.env` files (excluded via `.gitignore`)
-- Use password managers (1Password, LastPass, etc.)
-- Use secrets managers (AWS Secrets Manager, GCP Secret Manager, HashiCorp Vault)
-- Use environment variables in CI/CD systems
-- Use secure credential stores in your deployment platform
-
-**Important reminder:** Always verify that sensitive files like `.env` are listed in `.gitignore` before committing. Use `git status` to check what will be committed. Never commit clear-text passwords or authentication keys to any git repository, even private ones.
+- See `references/key_facts_template.md` for security guidelines on what NOT to store
 
 **Adding work log entry:**
 ```markdown
@@ -240,7 +223,7 @@ This skill includes template files in `references/` that demonstrate proper form
 
 - **references/bugs_template.md** - Bug entry format with examples
 - **references/decisions_template.md** - ADR format with examples
-- **references/key_facts_template.md** - Key facts organization with examples
+- **references/key_facts_template.md** - Key facts organization with examples (includes security guidelines)
 - **references/issues_template.md** - Work log format with examples
 
 When creating initial memory files, copy these templates to `docs/project_notes/` and customize them for the project.
@@ -251,56 +234,54 @@ When creating initial memory files, copy these templates to `docs/project_notes/
 
 ```
 User: "I'm getting a 'connection refused' error from the database"
-→ Search docs/project_notes/bugs.md for "connection"
-→ Find previous solution: "Use AlloyDB Auth Proxy on port 5432"
-→ Apply known fix
+-> Search docs/project_notes/bugs.md for "connection"
+-> Find previous solution: "Use AlloyDB Auth Proxy on port 5432"
+-> Apply known fix
 ```
 
 ### Scenario 2: Proposing an Architectural Change
 
 ```
 Internal: "User might benefit from using SQLAlchemy for migrations"
-→ Check docs/project_notes/decisions.md
-→ Find ADR-002: Already decided to use Alembic
-→ Use Alembic instead, maintaining consistency
+-> Check docs/project_notes/decisions.md
+-> Find ADR-002: Already decided to use Alembic
+-> Use Alembic instead, maintaining consistency
 ```
 
 ### Scenario 3: User Requests Memory Update
 
 ```
 User: "Add that CORS fix to our bug log"
-→ Read docs/project_notes/bugs.md
-→ Add new entry with date, issue, solution, prevention
-→ Confirm addition to user
+-> Read docs/project_notes/bugs.md
+-> Add new entry with date, issue, solution, prevention
+-> Confirm addition to user
 ```
 
 ### Scenario 4: Looking Up Project Configuration
 
 ```
 Internal: "Need to connect to database"
-→ Check docs/project_notes/key_facts.md
-→ Find Database Configuration section
-→ Use documented connection string and credentials
+-> Check docs/project_notes/key_facts.md
+-> Find Database Configuration section
+-> Use documented connection string and credentials
 ```
 
 ## Tips for Effective Memory Management
 
 1. **Be proactive**: Check memory files before proposing solutions
 2. **Be concise**: Keep entries brief (1-3 lines for descriptions)
-3. **Be consistent**: Follow established formats and style guidelines
-4. **Be dated**: Always include dates for temporal context
-5. **Be linked**: Include URLs to tickets, docs, monitoring dashboards
-6. **Be honest**: Document trade-offs and failures, not just successes
-7. **Be selective**: Not every bug needs documentation, focus on recurring or instructive issues
+3. **Be dated**: Always include dates for temporal context
+4. **Be linked**: Include URLs to tickets, docs, monitoring dashboards
+5. **Be selective**: Focus on recurring or instructive issues, not every bug
 
 ## Integration with Other Skills
 
 The project-memory skill complements other skills:
 
-- **requirements-documenter**: Requirements → Decisions (ADRs reference requirements)
-- **root-cause-debugger**: Bug diagnosis → Bug log (document solutions after fixes)
-- **code-quality-reviewer**: Quality issues → Decisions (document quality standards)
-- **docs-sync-editor**: Code changes → Key facts (update when config changes)
+- **requirements-documenter**: Requirements -> Decisions (ADRs reference requirements)
+- **root-cause-debugger**: Bug diagnosis -> Bug log (document solutions after fixes)
+- **code-quality-reviewer**: Quality issues -> Decisions (document quality standards)
+- **docs-sync-editor**: Code changes -> Key facts (update when config changes)
 
 When using these skills together, consider updating memory files as a follow-up action.
 
@@ -308,10 +289,10 @@ When using these skills together, consider updating memory files as a follow-up 
 
 This skill is successfully deployed when:
 
-- ✅ `docs/project_notes/` directory exists with all four memory files
-- ✅ CLAUDE.md includes "Project Memory System" section with protocols
-- ✅ AGENTS.md includes the same protocols (if file exists or user requested)
-- ✅ Memory files follow template format and style guidelines
-- ✅ AI assistant checks memory files before proposing changes
-- ✅ User can easily request memory updates ("add this to bugs.md")
-- ✅ Memory files look like standard engineering documentation, not AI artifacts
+- `docs/project_notes/` directory exists with all four memory files
+- CLAUDE.md includes "Project Memory System" section with protocols
+- AGENTS.md includes the same protocols (if file exists or user requested)
+- Memory files follow template format and style guidelines
+- AI assistant checks memory files before proposing changes
+- User can easily request memory updates ("add this to bugs.md")
+- Memory files look like standard engineering documentation, not AI artifacts
