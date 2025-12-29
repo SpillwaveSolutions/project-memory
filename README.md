@@ -1,6 +1,21 @@
 # Project Memory Skill
 
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-Skill-blue)](https://claude.ai/code)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Skilz Marketplace](https://img.shields.io/badge/Skilz-Marketplace-purple)](https://skillzwave.ai/skill/SpillwaveSolutions__project-memory__project-memory__SKILL/)
+
 A Claude Code skill that establishes a structured institutional knowledge system for your projects. Track bugs with solutions, architectural decisions (ADRs), key project facts, and work history in a consistent, maintainable format.
+
+## Quick Start
+
+```bash
+# Install via skilz (recommended)
+skilz install SpillwaveSolutions_project-memory/project-memory
+
+# Then use in any project
+cd your-project
+# In Claude Code, type: /project-memory
+```
 
 ## What This Skill Does
 
@@ -22,9 +37,42 @@ When invoked in a project, this skill:
 
 ## Installation
 
-There are three installation options depending on your needs:
+There are four installation options depending on your needs:
 
-### Option 1: Global Installation (Recommended)
+### Option 1: Skilz Universal Installer (Recommended)
+
+The fastest way to install this skill is using the [skilz CLI](https://github.com/SpillwaveSolutions/skilz) - the universal skill installer for Claude Code:
+
+```bash
+# Install skilz CLI (if not already installed)
+pip install skilz
+
+# Install this skill globally
+skilz install SpillwaveSolutions_project-memory/project-memory
+
+# Verify installation
+skilz list
+```
+
+**Benefits of skilz:**
+- One-command installation from the [Skilz Marketplace](https://skillzwave.ai/skill/SpillwaveSolutions__project-memory__project-memory__SKILL/)
+- Automatic dependency management
+- Easy updates with `skilz update`
+- Browse and discover skills at [skillzwave.ai](https://skillzwave.ai)
+
+**Alternative skilz commands:**
+```bash
+# Install to a specific project only
+skilz install SpillwaveSolutions_project-memory/project-memory --local
+
+# Update to the latest version
+skilz update project-memory
+
+# Uninstall if needed
+skilz uninstall project-memory
+```
+
+### Option 2: Global Installation (Manual)
 
 Install once in your Claude Code home directory to make the skill available across **all projects**:
 
@@ -41,7 +89,7 @@ ls ~/.claude/skills/project-memory
 
 **When to use:** You want this skill available for all your projects without reinstalling.
 
-### Option 2: Project-Specific Installation
+### Option 3: Project-Specific Installation (Manual)
 
 Install in a specific project's `.claude/skills/` directory:
 
@@ -61,7 +109,7 @@ ls .claude/skills/project-memory
 
 **When to use:** You only want this skill available for a specific project.
 
-### Option 3: Multi-Project Installation (Workspace)
+### Option 4: Multi-Project Installation (Workspace)
 
 Install above a workspace directory to share across multiple related projects:
 
